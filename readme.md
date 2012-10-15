@@ -1,4 +1,5 @@
---- ap1's changes to MikePearce's original ---
+@ap1's changes to @MikePearce's original
+======================================
 
 * Added support for Windows
   * Changed script extension to .py so windows knows that to do with it
@@ -8,11 +9,13 @@
 **Note**: I used shell=True in subprocess.check_output command which can be
 unsafe. Use at your own risk.
 
---- Get Status ---
+Get Status
+==========
 Ever wanted to get the status of repos in multiple sub directories? Yeah, me 
 too. So I knocked this up.
 
--- Installation --
+Installation (Unix)
+===================
 Copy the file to /usr/bin
 
 %> cp show_status /usr/bin (or /usr/sbin)
@@ -21,8 +24,14 @@ Give it execute permissions
 
 %> chmod +x /usr/bin/show_status
 
--- Usage --
-Usage: show_status [options]
+Installation (Windows)
+=====================
+Copy script to root of repositories. Drag shortcut to Desktop / Quicklaunch as
+needed.
+
+Usage
+=====
+    show_status.py [options]
 
 Show Status is awesome. If you tell it a directory to look in, it'll scan
 through all the sub dirs looking for a .git directory. When it finds one it'll
@@ -40,5 +49,6 @@ Options:
   -p PULL, --pull=PULL  Pull from the master (remotename:branchname)
 
 
--- Warranties/Guarantees --
+Warranties/Guarantees
+=====================
 None, you're on your own. If you'd like some help, mail me on mike@mikepearce.net
