@@ -76,7 +76,7 @@ def show_error(error="Undefined Error!"):
 # Now, onto the main event!
 #-------------------
 if __name__ == "__main__":
-    os.system('clear')
+    #os.system('clear')
     sys.stdout.write('-- Starting git status...\n')
 
         
@@ -124,7 +124,7 @@ if __name__ == "__main__":
                     # Write to screen
                     sys.stdout.write("--" + infile.ljust(40) + result +"\n")
                 else:
-                    sys.stdout.write("--" + infile.ljust(40) +": Changes\n")
+                    sys.stdout.write("--" + infile.ljust(40) + ": Changes\n")
             else:
                 #Print some repo details
                 sys.stdout.write("\n---------------- "+ infile +" -----------------\n")

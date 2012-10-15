@@ -1,4 +1,4 @@
---- ap1's changes to MikePearce's original
+--- ap1's changes to MikePearce's original ---
 
 * Added support for Windows
   * Changed script extension to .py so windows knows that to do with it
