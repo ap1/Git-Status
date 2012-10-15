@@ -10,7 +10,8 @@
 import sys
 import os
 import glob
-import commands
+#import commands
+import subprocess
 from optparse import OptionParser
 
 # Setup some stuff
@@ -92,7 +93,8 @@ if __name__ == "__main__":
             
             # OK, contains a .git file. Let's descend into it
             # and ask git for a status
-            out = commands.getoutput('cd '+ infile + '; git status')
+            #out = commands.getoutput('cd '+ infile + '; git status')
+            out = subprocess.check_output("cd \"" + infile + "\" && git status", shell=True)
             
             # Mini?
             if False == options.verbose:
@@ -101,19 +103,21 @@ if __name__ == "__main__":
                     
                     # Pull from the remote
                     if False != options.pull:
-                        push = commands.getoutput(
-                            'cd '+ infile +
-                            '; git pull '+ 
-                            ' '.join(options.remote.split(":")) 
+                        push = subprocess.check_output(
+                            "cd \"" + infile +
+                            "\" && git pull " +
+                            ' '.join(options.remote.split(":")),
+                            shell=True
                         )
                         result = result + " (Pulled) \n" + push
                                           
                     # Push to the remote  
                     if False != options.push:
-                        push = commands.getoutput(
-                            'cd '+ infile + 
-                            '; git push '+ 
-                            ' '.join(options.remote.split(":")) 
+                        push = subprocess.check_output(
+                            "cd \"" + infile +
+                            "\" && git push " +
+                            ' '.join(options.remote.split(":")),
+                            shell=True
                         )
                         result = result + " (Pushed) \n" + push
                         
@@ -128,7 +132,8 @@ if __name__ == "__main__":
                 sys.stdout.write("\n---------------- "+ infile +" -----------------\n")
                 
             # Come out of the dir and into the next
-            commands.getoutput('cd ../')
+            #commands.getoutput('cd ../')
+            subprocess.check_output("cd ..",shell=True)
                 
             
 
@@ -136,5 +141,6 @@ if __name__ == "__main__":
     if False == gitted:
         show_error("Error: None of those sub directories had a .git file.\n")
 
-    sys.stdout.write("Done\n")
+    #sys.stdout.write("Done\n")
       
+    raw_input("Press Enter to Exit")
