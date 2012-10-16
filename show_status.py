@@ -88,7 +88,7 @@ def check_output(command, allowretcode):
                 messages = "\n\tWarning: git status returned %d.\
                 \n\tPlease run verbose mode for more information\n" %( retcode)
                 return output[0]
-    return output 
+    return output[0] 
 
     
 #-------------------
