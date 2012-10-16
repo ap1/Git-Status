@@ -70,7 +70,22 @@ def show_error(error="Undefined Error!"):
     """Writes an error to stderr"""
     sys.stderr.write(error)
     sys.exit(1)
-    
+
+#-------------------
+def check_output(command, allowretcode):
+#-------------------
+    """Wrapper to subprocess.check_output to handle git misbehavior"""
+    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
+    output = process.communicate()
+    retcode = process.poll()
+    if retcode:
+            if retcode != allowretcode:
+                raise subprocess.CalledProcessError(retcode, command, output=output[0])
+            else:
+                print "[W] git status returned %d" %( retcode)
+                return output[0]
+    return output 
+
     
 #-------------------
 # Now, onto the main event!
@@ -94,7 +109,7 @@ if __name__ == "__main__":
             # OK, contains a .git file. Let's descend into it
             # and ask git for a status
             #out = commands.getoutput('cd '+ infile + '; git status')
-            out = subprocess.check_output("cd \"" + infile + "\" && git status", shell=True)
+            out = check_output("cd \"" + infile + "\" && git status ", 1)
             
             # Mini?
             if False == options.verbose:
@@ -103,28 +118,24 @@ if __name__ == "__main__":
                     
                     # Pull from the remote
                     if False != options.pull:
-                        push = subprocess.check_output(
-                            "cd \"" + infile +
-                            "\" && git pull " +
-                            ' '.join(options.remote.split(":")),
-                            shell=True
+                        push = check_output(
+                            "cd \"" + infile + "\" && git pull " +
+                            ' '.join(options.remote.split(":")),0
                         )
                         result = result + " (Pulled) \n" + push
                                           
                     # Push to the remote  
                     if False != options.push:
-                        push = subprocess.check_output(
-                            "cd \"" + infile +
-                            "\" && git push " +
-                            ' '.join(options.remote.split(":")),
-                            shell=True
+                        push = check_output(
+                            "cd \"" + infile + "\" && git push " +
+                            ' '.join(options.remote.split(":")),0
                         )
                         result = result + " (Pushed) \n" + push
                         
                     # Write to screen
-                    sys.stdout.write("--" + infile.ljust(40) + result +"\n")
+                    sys.stdout.write("--" + infile.ljust(60) + result +"\n")
                 else:
-                    sys.stdout.write("--" + infile.ljust(40) + ": Changes\n")
+                    sys.stdout.write("--" + infile.ljust(60) + ": Changes\n")
             else:
                 #Print some repo details
                 sys.stdout.write("\n---------------- "+ infile +" -----------------\n")
@@ -133,7 +144,7 @@ if __name__ == "__main__":
                 
             # Come out of the dir and into the next
             #commands.getoutput('cd ../')
-            subprocess.check_output("cd ..",shell=True)
+            check_output("cd ..",0)
                 
             
 
