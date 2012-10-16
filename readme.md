@@ -5,6 +5,7 @@ ap1's changes to MikePearce's original
   * Changed script extension to .py so windows knows that to do with it
   * Replaced commands with subprocess to make it work with Windows
   * Added "Press Enter to Exit" to allow double-click
+  * Allowed git status to return 1
 
 **Note**: I used shell=True in subprocess.check_output command which can be
 unsafe. Use at your own risk.
