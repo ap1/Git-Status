@@ -19,6 +19,8 @@ dirname = './'
 gitted  = False
 mini    = True
 
+messages = ""
+
 parser = OptionParser(description="\
 Show Status is awesome. If you tell it a directory to look in, it'll scan \
 through all the sub dirs looking for a .git directory. When it finds one \
@@ -82,7 +84,9 @@ def check_output(command, allowretcode):
             if retcode != allowretcode:
                 raise subprocess.CalledProcessError(retcode, command, output=output[0])
             else:
-                print "[W] git status returned %d" %( retcode)
+                global messages
+                messages = "\n\tWarning: git status returned %d.\
+                \n\tPlease run verbose mode for more information\n" %( retcode)
                 return output[0]
     return output 
 
@@ -153,5 +157,7 @@ if __name__ == "__main__":
         show_error("Error: None of those sub directories had a .git file.\n")
 
     #sys.stdout.write("Done\n")
+
+    print messages
       
     raw_input("Press Enter to Exit")
