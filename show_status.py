@@ -96,7 +96,7 @@ def check_output(command, allowretcode):
 #-------------------
 if __name__ == "__main__":
     #os.system('clear')
-    sys.stdout.write('-- Starting git status...\n')
+    #sys.stdout.write('-- Starting git status...\n')
 
         
     sys.stdout.write('Scanning sub directories of %s\n' %options.dirname)
@@ -137,9 +137,9 @@ if __name__ == "__main__":
                         result = result + " (Pushed) \n" + push
                         
                     # Write to screen
-                    sys.stdout.write("--" + infile.ljust(60) + result +"\n")
+                    sys.stdout.write("[git] " + infile.ljust(60) + result +"\n")
                 else:
-                    sys.stdout.write("--" + infile.ljust(60) + ": Changes\n")
+                    sys.stdout.write("[git] " + infile.ljust(60) + ": Changes\n")
             else:
                 #Print some repo details
                 sys.stdout.write("\n---------------- "+ infile +" -----------------\n")
@@ -155,6 +155,70 @@ if __name__ == "__main__":
             
     if False == gitted:
         show_error("Error: None of those sub directories had a .git file.\n")
+
+
+    #os.system('clear')
+    #sys.stdout.write('-- Starting svn status...\n')
+
+        
+    #sys.stdout.write('Scanning sub directories of %s\n' %options.dirname)
+    
+    # See whats here
+    for infile in glob.glob( os.path.join(options.dirname, '*') ):
+
+        #is there a .git file
+        if os.path.exists( os.path.join(infile, ".svn") ):
+            
+            #Yay, we found one!
+            gitted = True
+            
+            # OK, contains a .git file. Let's descend into it
+            # and ask git for a status
+            #out = commands.getoutput('cd '+ infile + '; git status')
+            out = check_output("cd \"" + infile + "\" && svn diff | grep Index ", 1)
+            
+            # Mini?
+            if False == options.verbose:
+                if -1 == out.find('Index'):
+                    result = ": No Changes"
+                    
+                    # Pull from the remote
+                    if False != options.pull:
+                        push = check_output(
+                            "cd \"" + infile + "\" && svn up " +
+                            ' '.join(options.remote.split(":")),0
+                        )
+                        result = result + " (Pulled) \n" + push
+                                          
+                    # Push to the remote  
+                    if False != options.push:
+                        push = check_output(
+                            "cd \"" + infile + "\"  " +
+                            ' '.join(options.remote.split(":")),0
+                        )
+                        result = result + " (Pushed) \n" + push
+                        
+                    # Write to screen
+                    sys.stdout.write("[svn] " + infile.ljust(60) + result +"\n")
+                else:
+                    sys.stdout.write("[svn] " + infile.ljust(60) + ": Changes\n")
+            else:
+                #Print some repo details
+                sys.stdout.write("\n---------------- "+ infile +" -----------------\n")
+                sys.stdout.write(out)
+                sys.stdout.write("\n---------------- "+ infile +" -----------------\n")
+                
+            # Come out of the dir and into the next
+            #commands.getoutput('cd ../')
+            check_output("cd ..",0)
+                
+            
+
+            
+    if False == gitted:
+        show_error("Error: None of those sub directories had a .git file.\n")
+
+
 
     #sys.stdout.write("Done\n")
 
