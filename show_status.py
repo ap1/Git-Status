@@ -6,11 +6,12 @@
 # @author   Mike Pearce <mike@mikepearce.net>
 # @since    18/05/2010
 
+# Forked by ap
+
 # Grab some libraries
 import sys
 import os
 import glob
-#import commands
 import subprocess
 from optparse import OptionParser
 
@@ -95,11 +96,13 @@ def check_output(command, allowretcode):
 # Now, onto the main event!
 #-------------------
 if __name__ == "__main__":
-    #os.system('clear')
-    #sys.stdout.write('-- Starting git status...\n')
 
-        
     sys.stdout.write('Scanning sub directories of %s\n' %options.dirname)
+
+
+    # ------------------------------------------------------
+    #       git Part
+    # ------------------------------------------------------
     
     # See whats here
     for infile in glob.glob( os.path.join(options.dirname, '*') ):
@@ -157,24 +160,20 @@ if __name__ == "__main__":
         show_error("Error: None of those sub directories had a .git file.\n")
 
 
-    #os.system('clear')
-    #sys.stdout.write('-- Starting svn status...\n')
-
-        
-    #sys.stdout.write('Scanning sub directories of %s\n' %options.dirname)
-    
+    # ------------------------------------------------------
+    #       svn Part
+    # ------------------------------------------------------
     # See whats here
     for infile in glob.glob( os.path.join(options.dirname, '*') ):
 
-        #is there a .git file
+        #is there a .svn folder
         if os.path.exists( os.path.join(infile, ".svn") ):
             
             #Yay, we found one!
-            gitted = True
+            svnned = True
             
-            # OK, contains a .git file. Let's descend into it
-            # and ask git for a status
-            #out = commands.getoutput('cd '+ infile + '; git status')
+            # OK, contains a .svn folder. Let's descend into it
+            # and ask svn for info
             out = check_output("cd \"" + infile + "\" && svn diff | grep Index ", 1)
             
             # Mini?
@@ -192,11 +191,8 @@ if __name__ == "__main__":
                                           
                     # Push to the remote  
                     if False != options.push:
-                        push = check_output(
-                            "cd \"" + infile + "\"  " +
-                            ' '.join(options.remote.split(":")),0
-                        )
-                        result = result + " (Pushed) \n" + push
+                        # do nothing
+                        result = result + " ( n/a  ) \n" + push
                         
                     # Write to screen
                     sys.stdout.write("[svn] " + infile.ljust(60) + result +"\n")
@@ -209,18 +205,11 @@ if __name__ == "__main__":
                 sys.stdout.write("\n---------------- "+ infile +" -----------------\n")
                 
             # Come out of the dir and into the next
-            #commands.getoutput('cd ../')
             check_output("cd ..",0)
-                
-            
 
             
-    if False == gitted:
-        show_error("Error: None of those sub directories had a .git file.\n")
-
-
-
-    #sys.stdout.write("Done\n")
+    if False == svnned:
+        show_error("Error: None of those sub directories had .svn\n")
 
     print messages
       
