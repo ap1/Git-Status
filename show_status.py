@@ -18,6 +18,7 @@ from optparse import OptionParser
 # Setup some stuff
 dirname = './'
 gitted  = False
+svnned  = False
 mini    = True
 
 messages = ""
