@@ -141,9 +141,9 @@ if __name__ == "__main__":
                         result = result + " (Pushed) \n" + push
                         
                     # Write to screen
-                    sys.stdout.write("[git] " + infile.ljust(60) + result +"\n")
+                    sys.stdout.write("[git] " + os.path.basename(infile).ljust(30) + result +"\n")
                 else:
-                    sys.stdout.write("[git] " + infile.ljust(60) + ": Changes\n")
+                    sys.stdout.write("[git] " + os.path.basename(infile).ljust(30) + ": Changes\n")
             else:
                 #Print some repo details
                 sys.stdout.write("\n---------------- "+ infile +" -----------------\n")
@@ -196,9 +196,9 @@ if __name__ == "__main__":
                         result = result + " ( n/a  ) \n" + push
                         
                     # Write to screen
-                    sys.stdout.write("[svn] " + infile.ljust(60) + result +"\n")
+                    sys.stdout.write("[svn] " + os.path.basename(infile).ljust(30) + result +"\n")
                 else:
-                    sys.stdout.write("[svn] " + infile.ljust(60) + ": Changes\n")
+                    sys.stdout.write("[svn] " + os.path.basename(infile).ljust(30) + ": Changes\n")
             else:
                 #Print some repo details
                 sys.stdout.write("\n---------------- "+ infile +" -----------------\n")
